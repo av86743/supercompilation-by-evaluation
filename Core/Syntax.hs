@@ -9,7 +9,8 @@ type Var = Name
 
 type DataCon = String
 
-data PrimOp = Add | Subtract | Multiply | Divide | Modulo | Equal | LessThan | LessThanEqual
+data PrimOp = Add | Subtract | Multiply | Divide | Modulo | Equal | LessThan | LessThanEqual |
+              GHC'b0rkage ()
             deriving (Eq, Ord, Show)
 
 data AltCon = DataAlt DataCon [Var] | LiteralAlt Literal | DefaultAlt (Maybe Var)
@@ -34,7 +35,8 @@ type TaggedValue = ValueF TaggedTerm
 data ValueF term = Lambda Var term | Data DataCon [Var] | Literal Literal
                  deriving (Eq, Show)
 
-instance NFData PrimOp
+instance NFData PrimOp where
+    rnf _ = rnf ()
 
 instance NFData AltCon where
     rnf (DataAlt a b) = rnf a `seq` rnf b
@@ -73,6 +75,7 @@ instance Pretty PrimOp where
     pPrint Equal         = text "(==)"
     pPrint LessThan      = text "(<)"
     pPrint LessThanEqual = text "(<=)"
+    pPrint _             = undefined
 
 instance Pretty AltCon where
     pPrintPrec level prec altcon = case altcon of

@@ -95,6 +95,10 @@ newtype ParseM a = ParseM { unParseM :: ParseState -> (ParseState, a) }
 instance Functor ParseM where
     fmap = liftM
 
+instance Applicative ParseM where
+    pure  = return
+    (<*>) = ap
+
 instance Monad ParseM where
     return x = ParseM $ \s -> (s, x)
     mx >>= fxmy = ParseM $ \s -> case unParseM mx s of (s, x) -> unParseM (fxmy x) s

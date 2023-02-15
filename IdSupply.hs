@@ -58,15 +58,18 @@ splitIdSupplyL ids = ids1 : splitIdSupplyL ids2
 idFromSupply :: IdSupply -> Id
 idFromSupply (IdSupply n _ _) = Id (I# n)
 
-instance Eq Id where Id x == Id y = x == y
+instance Eq Id where Id (I# x) == Id (I# y) = i2b (x ==# y)
 
 instance Ord Id
  where
-  Id x <  Id y = x <  y
-  Id x <= Id y = x <= y
+  Id (I# x) <  Id (I# y) = i2b (x <#  y)
+  Id (I# x) <= Id (I# y) = i2b (x <=# y)
 
-  compare (Id x) (Id y) =
-   if x == y then EQ else if x < y then LT else GT
+  compare (Id (I# x)) (Id (I# y)) =
+   if i2b (x ==# y) then EQ else if i2b (x <# y) then LT else GT
+
+i2b :: Int# -> Bool
+i2b x = case x of 0# -> False; _ -> True
 
 instance Show Id
  where

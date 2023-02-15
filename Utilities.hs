@@ -24,7 +24,7 @@ import Control.DeepSeq (NFData(..), rnf)
 import Control.Monad
 
 import Data.Maybe
-import Data.List
+import Data.List hiding (uncons)
 import qualified Data.Map as M
 import qualified Data.Set as S
 import Data.Time.Clock.POSIX (getPOSIXTime)
