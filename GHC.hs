@@ -23,7 +23,7 @@ termToHaskellBinding name e = (name ++ " = " ++ l) : map (replicate indent ' ' +
         (l:ls) = lines $ termToHaskell e
 
 languageLine :: String
-languageLine = "{-# LANGUAGE ExtendedDefaultRules, NoMonoPatBinds #-}"
+languageLine = "{-# LANGUAGE ExtendedDefaultRules, NoMonoLocalBinds #-}"
 
 testingModule :: String -> Term -> Term -> String
 testingModule wrapper e test_e = unlines $

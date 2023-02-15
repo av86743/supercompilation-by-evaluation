@@ -1,6 +1,8 @@
 {-# LANGUAGE PatternGuards, ViewPatterns, TypeSynonymInstances, FlexibleInstances #-}
 module Core.Syntax where
 
+import Prelude hiding ((<>))
+
 import Name
 import Utilities
 

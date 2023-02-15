@@ -9,6 +9,8 @@ module Renaming (
     foldRenaming
   ) where
 
+import Prelude hiding ((<>))
+
 import Name
 import Utilities
 
@@ -75,5 +77,5 @@ renameRenaming :: Renaming -> Renaming -> Renaming
 renameRenaming rn_by = Renaming . M.mapMaybe (rename_maybe rn_by) . unRenaming
 
 foldRenaming :: (In Name -> Out Name -> b -> b) -> b -> Renaming -> b
-foldRenaming f b = M.foldWithKey f b . unRenaming
+foldRenaming f b = M.foldrWithKey f b . unRenaming
 

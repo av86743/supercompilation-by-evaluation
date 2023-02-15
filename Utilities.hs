@@ -16,6 +16,8 @@ module Utilities (
     module Text.PrettyPrint.HughesPJClass
   ) where
 
+import Prelude hiding ((<>))
+
 import IdSupply
 import StaticFlags
 
@@ -32,7 +34,7 @@ import Data.Time.Clock.POSIX (getPOSIXTime)
 import Debug.Trace
 
 import Text.PrettyPrint.HughesPJClass hiding (render, int, char, first)
-import qualified Text.PrettyPrint.HughesPJClass as Pretty
+import qualified Text.PrettyPrint.HughesPJClass as Pretty(char)
 
 import System.IO
 import System.IO.Unsafe (unsafePerformIO)
@@ -111,10 +113,6 @@ matchIdSupply = unsafePerformIO $ initIdSupply 'm'
 
 stepIdSupply :: IdSupply -> (IdSupply, Id)
 stepIdSupply = second idFromSupply . splitIdSupply
-
-
-data Train a b = Wagon a (Train a b)
-               | Caboose b
 
 
 appPrec, opPrec, noPrec :: Rational
@@ -296,12 +294,12 @@ fixpoint f x
    | otherwise = fixpoint f x'
   where x' = f x
 
-zipWithEqualM :: Monad m => (a -> b -> m c) -> [a] -> [b] -> m [c]
+zipWithEqualM :: (MonadFail m, Monad m) => (a -> b -> m c) -> [a] -> [b] -> m [c]
 zipWithEqualM _ []     []     = return []
 zipWithEqualM f (x:xs) (y:ys) = liftM2 (:) (f x y) (zipWithEqualM f xs ys)
 zipWithEqualM _ _ _ = fail "zipWithEqualM"
 
-zipWithEqualM_ :: Monad m => (a -> b -> m ()) -> [a] -> [b] -> m ()
+zipWithEqualM_ :: (MonadFail m, Monad m) => (a -> b -> m ()) -> [a] -> [b] -> m ()
 zipWithEqualM_ _ []     []     = return ()
 zipWithEqualM_ f (x:xs) (y:ys) = f x y >> zipWithEqualM_ f xs ys
 zipWithEqualM_ _ _ _ = fail "zipWithEqualM_"
